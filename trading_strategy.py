@@ -39,3 +39,8 @@ def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
     df = df.dropna(subset=["Open", "High", "Low", "Close", "Volume"])
     return df
 
+def add_moving_averages(df: pd.DataFrame, short_window: int, long_window: int) -> pd.DataFrame:
+    df = df.copy()
+    df["SMA_short"] = df["Close"].rolling(window=short_window).mean()
+    df["SMA_long"] = df["Close"].rolling(window=long_window).mean()
+    return df
