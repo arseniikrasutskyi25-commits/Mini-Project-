@@ -44,3 +44,10 @@ def add_moving_averages(df: pd.DataFrame, short_window: int, long_window: int) -
     df["SMA_short"] = df["Close"].rolling(window=short_window).mean()
     df["SMA_long"] = df["Close"].rolling(window=long_window).mean()
     return df
+
+def generate_signals(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+    df["Signal"] = np.where(df["SMA_short"] > df["SMA_long"], 1, 0)
+    df.loc[df["SMA_long"].isna(), "Signal"] = 0
+    df["Position"] = df["Signal"].diff()
+    return df
